@@ -1,6 +1,7 @@
 import requests
 from dotenv import load_dotenv
 import os
+import json
 
 load_dotenv()
 
@@ -34,3 +35,7 @@ while True:
     page += 1
         
 print(f"\nTotal repositories collected: {len(repos_list)}")
+
+directory_path = 'data/raw/repos_list.json'
+with open(directory_path, 'w') as file:
+    json.dump(repos_list, file, indent=4)

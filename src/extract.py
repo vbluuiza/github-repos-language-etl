@@ -1,41 +1,15 @@
-import requests
-from dotenv import load_dotenv
-import os
-import json
+from src.scripts.repos_data import RepositoriesData
 
-load_dotenv()
 
-headers = {'X-GitHub-Api-Version': '2022-11-28',
-           'Authorization': 'Bearer ' + os.getenv('ACCESS_TOKEN')
-           }
 
-api_url_base = 'https://api.github.com'
-owner = 'amzn'
-url = f'{api_url_base}/users/{owner}/repos'
+amazon_repo = RepositoriesData('amzn')
+most_used_langs_amzn = amazon_repo.create_df_lang()
+# print(most_used_langs_amzn)
 
-response = requests.get(url, headers=headers)
+netflix_repo = RepositoriesData('netflix')
+most_used_langs_netflix = netflix_repo.create_df_lang()
+# print(most_used_langs_netflix)
 
-repos_list = []
-page = 1
-
-while True:
-    url_page = f'{url}?page={page}&per_page=100'
-    response = requests.get(url_page, headers=headers)
-
-    if response.status_code != 200:
-        print(f"❌ Error on page {page}: {response.status_code}")
-        break
-
-    data = response.json()
-    if not data:
-        break
-
-    repos_list.extend(data)
-    print(f"✅ Page {page} loaded: {len(data)} repos")
-    page += 1
-        
-print(f"\nTotal repositories collected: {len(repos_list)}")
-
-directory_path = 'data/raw/repos_list.json'
-with open(directory_path, 'w') as file:
-    json.dump(repos_list, file, indent=4)
+spotify_repo = RepositoriesData('spotify')
+most_used_langs_spotify = spotify_repo.create_df_lang()
+# print(most_used_langs_spotify)
